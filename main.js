@@ -3,7 +3,7 @@ class Usuario {
         this.nombre = nombre,
         this.apellido = apellido,
         this.libros = [libros],
-        this.mascotas = [mascotas]
+        this.mascotas = [...mascotas]
     }
 
     getFullName() {
@@ -11,7 +11,10 @@ class Usuario {
     }
 
     addMascota(nuevaMascota) {
-        this.mascotas.push(nuevaMascota);
+        typeof nuevaMascota == "object" ?
+            this.mascotas.push(...nuevaMascota)
+            :
+            this.mascotas.push(nuevaMascota);
     }
 
     countMascotas() {
@@ -29,9 +32,3 @@ class Usuario {
         return bookNames;
     }
 }
-
-
-const user = new Usuario("Andrés", "Marolt", {nombre: "Tom Sawyer", autor: "Mark Twain"}, "Sasha");
-user.addBook("Corazón", "Edmundo de Amicis")
-
-console.log(user.getBookNames());
