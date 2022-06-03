@@ -17,30 +17,41 @@ class Contenedor {
 
     async save(obj) {
         try {
-            let productsString = await fs.promises.readFile(`./${this.file}`, 'utf-8');       // Lee lo que haya en el archivo si este ya existe
-            let productsObj = JSON.parse(productsString);                                     
-            let ids = productsObj.map(product => {                                            // Crea un array que contiene los ids de todos los productos
-                return product.id;
-            })
-            if(ids.some(el => el !== null)) {
-                const maxId = Math.max(...ids);                                                     // Busca el id más alto
-                const newId = maxId+1;                                                              // El id del producto agregado será el máximo id + 1
-                obj.id = newId;                                                                     // Se le asigna el nuevo id al nuevo producto
-            } else {
-                obj.id = 1;
-            }
-            productsObj.push(obj);
-            productsString = JSON.stringify(productsObj);
-            await fs.promises.writeFile(`./${this.file}`, productsString);
-            return obj.id;
+            let existe;
+            fs.existsSync(`./${this.file}`) ? existe=true : existe=false;
 
-        } catch(error) {                    // Si no existe un archivo con el nombre indicado se arroja error al intentar leerlo y se pasa al catch, donde se lo crea
-            let productsArray = [];
-            let id = 1;
-            obj.id = id;
-            productsArray.push(obj);
-            productsArray = JSON.stringify(productsArray);
-            await fs.promises.writeFile(`./${this.file}`, productsArray);
+            if(existe) {
+                let productsString = await fs.promises.readFile(`./${this.file}`, 'utf-8');       // Lee lo que haya en el archivo si este ya existe
+                console.log(existe);
+                let productsObj = JSON.parse(productsString);                                     
+                let ids = productsObj.map(product => {                                            // Crea un array que contiene los ids de todos los productos
+                    return product.id;
+                })
+                if(ids.some(el => el !== null)) {                                                       // Comprueba que lo leido del texto haya sido un array de objetos con la key "id"
+                    const maxId = Math.max(...ids);                                                     // Busca el id más alto
+                    const newId = maxId+1;                                                              // El id del producto agregado será el máximo id + 1
+                    obj.id = newId;                                                                     // Se le asigna el nuevo id al nuevo producto
+                } else {
+                    obj.id = 1;
+                }
+                productsObj.push(obj);
+                productsString = JSON.stringify(productsObj);
+                await fs.promises.writeFile(`./${this.file}`, productsString);
+                return obj.id;
+
+            } else {
+                let productsArray = [];
+                let id = 1;
+                obj.id = id;
+                productsArray.push(obj);
+                productsArray = JSON.stringify(productsArray);
+                await fs.promises.writeFile(`./${this.file}`, productsArray);
+                return obj.id;
+            }
+
+        } catch(error) {
+            console.log("Hubo un error al intentar guardar el producto en el archivo");
+            console.log(error);              
         }
     }
 
@@ -50,8 +61,9 @@ class Contenedor {
             const productsObj = JSON.parse(productsString);
             const searchedProd = productsObj.find(product => { return product.id == id });
             return searchedProd;
-        } catch {
+        } catch(error) {
             console.log("Hubo un error al buscar el id ingresado");
+            console.log(error);
         }
     }
 
@@ -98,7 +110,7 @@ const prod5 = new Product("Buzo", 10000, 7);
 const file = new Contenedor("productos.txt");
 
 
-file.save(prod1);
+file.save(prod2);
 
 // file.getById(1)
 //     .then(res => console.log(res));
