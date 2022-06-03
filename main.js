@@ -17,6 +17,10 @@ class Contenedor {
 
     async save(obj) {
         try {
+            const fileExists = false;
+            if(fs.open(`./${this.file}`, 'r', (err, f) => {
+                console.log("EXISTE");
+            }));
             let productsString = await fs.promises.readFile(`./${this.file}`, 'utf-8');       // Lee lo que haya en el archivo si este ya existe
             let productsObj = JSON.parse(productsString);                                     
             let ids = productsObj.map(product => {                                            // Crea un array que contiene los ids de todos los productos
@@ -35,12 +39,13 @@ class Contenedor {
             return obj.id;
 
         } catch(error) {                    // Si no existe un archivo con el nombre indicado se arroja error al intentar leerlo y se pasa al catch, donde se lo crea
-            let productsArray = [];
+            console.log(error);
+            /* let productsArray = [];
             let id = 1;
             obj.id = id;
             productsArray.push(obj);
             productsArray = JSON.stringify(productsArray);
-            await fs.promises.writeFile(`./${this.file}`, productsArray);
+            await fs.promises.writeFile(`./${this.file}`, productsArray); */
         }
     }
 
