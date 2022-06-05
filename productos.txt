@@ -1,0 +1,32 @@
+[
+    {
+        "title":"Camiseta",
+        "price":9500,
+        "stock":5,
+        "id": 1
+    },
+    {
+        "title":"Short",
+        "price":7000,
+        "stock":7,
+        "id": 2
+    },
+    {
+        "title":"Remera",
+        "price":6000,
+        "stock":9,
+        "id": 3
+    },
+    {
+        "title":"Buzo",
+        "price":10000,
+        "stock":6,
+        "id": 4
+    },
+    {
+        "title":"Camiseta",
+        "price":8000,
+        "stock":7,
+        "id":5
+    }
+]
