@@ -1,7 +1,11 @@
 {
-  "name": "proyecto-backend",
+  "name": "proyecto-coder-backend",
   "version": "1.0.0",
+  "description": "",
   "main": "main.js",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
   "devDependencies": {
     "nodemon": "^2.0.16"
   },
@@ -18,10 +22,5 @@
   "bugs": {
     "url": "https://github.com/AndresMarolt/backend-coder/issues"
   },
-  "homepage": "https://github.com/AndresMarolt/backend-coder#readme",
-  "description": "",
-  "dependencies": {
-    "express": "^4.18.1",
-    "moment": "~2.29.3"
-  }
+  "homepage": "https://github.com/AndresMarolt/backend-coder#readme"
 }

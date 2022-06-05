@@ -1,44 +1,51 @@
-/* const express = require('express')
-const app = express();
-const port = 5000;
-
-
-app.get('/', (req, res) => {
-    res.status(200).send('Hola soy home');
-})
-
-app.get('/publicaciones', (req, res) => {
-    res.send('Hola soy ruta publicaciones')
-})
-
-app.listen(port, () => {
-    console.log(`Servidor escuchando puerto ${port}`);
-}) */
-
+const fs = require('fs');
 const express = require('express');
+const { log } = require('console');
 const app = express();
 const port = 8080;
 
-let visitas = 0;
+class Contenedor {
 
-app.use((req, res, next) => {           // FUNCION MIDDLEWARE
-    visitas++;
-    next();
+    constructor(fileName) {
+        this.file = fileName;
+    }
+
+    async getById(id) {
+        try {
+            const productsString = await fs.promises.readFile(`./${this.file}`, 'utf-8');
+            const productsObj = JSON.parse(productsString);
+            const searchedProd = productsObj.find(product => { return product.id == id });
+            return searchedProd;
+        } catch(error) {
+            console.log("Hubo un error al buscar el id ingresado");
+            console.log(error);
+        }
+    }
+
+    async getAll() {
+        try {
+            const allProducts = await fs.promises.readFile(`./${this.file}`, 'utf-8');
+            console.log(allProducts);
+            return JSON.parse(allProducts);
+
+        } catch(error) {
+            console.log("Error al intentar obtener todos los productos");
+            console.log(error);
+        }
+    }
+}
+
+const file = new Contenedor("productos.txt");
+
+app.get('/productos', (req, res) => {
+    file.getAll().then(r => res.send(r));
 })
 
-app.get('/', (req, res) => {
-    res.send('<h1 style=color:blue >Bienvenidos al servidor Express!</h1>')
-})
-
-app.get('/visitas', (req, res) => {
-    res.send(`El servidor tuvo ${visitas} visitas`)
-})
-
-app.get('/fyh', (req, res) => {
-    const today = new Date().get;
-    res.send(today);
+app.get('/productoRandom', (req, res) => {
+    let randomNum = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+    file.getById(randomNum).then(r => res.send(r));
 })
 
 app.listen(port, () => {
-    console.log(`Servidor escuchando puerto ${port}`);
+    console.log(`Escuchando a puerto ${port}`);
 })
